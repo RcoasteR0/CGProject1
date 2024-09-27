@@ -56,14 +56,18 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		r = 0.0f; g = 1.0f; b = 1.0f;
 		break;
 	case 'm': //--- 배경색을 자홍색으로 설정
+		r = 1.0f; g = 0.0f; b = 1.0f;
 		break;
 	case 'y': //--- 배경색을 노랑색으로 설정
+		r = 1.0f; g = 1.0f; b = 0.0f;
 		break;
 	case 'a': // 랜덤색
 		break;
 	case 'w': // 백색
+		r = 1.0f; g = 1.0f; b = 1.0f;
 		break;
 	case 'k': // black
+		r = 0.0f; g = 0.0f; b = 0.0f;
 		break;
 	case 't': // set timer and random color
 		break;
