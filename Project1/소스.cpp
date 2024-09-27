@@ -4,7 +4,7 @@
 #include<gl/freeglut.h>
 #include <gl/freeglut_ext.h>
 
-#define Quiz1
+#define Quiz2
 
 using namespace std;
 
@@ -22,6 +22,10 @@ uniform_real_distribution<float> randcolor(0.0f, 1.0f);
 
 GLvoid Timer(int value);
 #endif // Quiz1
+
+#ifdef Quiz2
+
+#endif // Quiz2
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
