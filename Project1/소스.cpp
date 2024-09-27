@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <gl/glew.h> //--- 필요한 헤더파일 include
 #include<gl/freeglut.h>
 #include <gl/freeglut_ext.h>
@@ -7,12 +8,19 @@
 
 using namespace std;
 
+random_device rd;
+mt19937 gen(rd());
+
 GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
 
 #ifdef Quiz1
-float r = 1.0f, g = 1.0f, b = 1.0f, a = 1.0f;
+float red = 1.0f, green = 1.0f, blue = 1.0f, alpha = 1.0f;
+bool timer = false;
+uniform_real_distribution<float> randcolor(0.0f, 1.0f);
+
+GLvoid Timer(int value);
 #endif // Quiz1
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -33,48 +41,84 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	}
 	else
 		std::cout << "GLEW Initialized\n";
+
 	glutDisplayFunc(drawScene); //--- 출력 콜백함수의 지정
 	glutReshapeFunc(Reshape); //--- 다시 그리기 콜백함수 지정
 	glutKeyboardFunc(Keyboard); //--- 키보드 입력 콜백함수 지정
+
+#ifdef Quiz1
+	glutTimerFunc(1000, Timer, 1);
+#endif // Quiz1
+
 	glutMainLoop(); //--- 이벤트 처리 시작
 }
 
 GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 {
+	float r, g, b, a;
+
+#ifdef Quiz1
+	r = red; g = green; b = blue; a = alpha;
+#endif // Quiz1
+
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
+
 GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 {
 	glViewport(0, 0, w, h);
 }
+
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
+#ifdef Quiz1
 	switch (key) {
 	case 'c': //--- 배경색을 청록색으로 설정
-		r = 0.0f; g = 1.0f; b = 1.0f;
+		red = 0.0f; green = 1.0f; blue = 1.0f;
 		break;
 	case 'm': //--- 배경색을 자홍색으로 설정
-		r = 1.0f; g = 0.0f; b = 1.0f;
+		red = 1.0f; green = 0.0f; blue = 1.0f;
 		break;
 	case 'y': //--- 배경색을 노랑색으로 설정
-		r = 1.0f; g = 1.0f; b = 0.0f;
+		red = 1.0f; green = 1.0f; blue = 0.0f;
 		break;
 	case 'a': // 랜덤색
+		red = randcolor(gen); green = randcolor(gen); blue = randcolor(gen);
 		break;
 	case 'w': // 백색
-		r = 1.0f; g = 1.0f; b = 1.0f;
+		red = 1.0f; green = 1.0f; blue = 1.0f;
 		break;
 	case 'k': // black
-		r = 0.0f; g = 0.0f; b = 0.0f;
+		red = 0.0f; green = 0.0f; blue = 0.0f;
 		break;
 	case 't': // set timer and random color
+		timer = true;
 		break;
 	case 's': // end timer
+		timer = false;
 		break;
 	case 'q':
+		glutLeaveMainLoop();
 		break;
 	}
+#endif // Quiz1
+
 	glutPostRedisplay(); //--- 배경색이 바뀔 때마다 출력 콜백 함수를 호출하여 화면을 refresh 한다
 }
+
+#ifdef Quiz1
+GLvoid Timer(int value)
+{
+	if (timer)
+	{
+		red = randcolor(gen); green = randcolor(gen); blue = randcolor(gen);
+	}
+
+	glutPostRedisplay();
+	glutTimerFunc(1000, Timer, 1);
+}
+#endif // Quiz1
+
+
