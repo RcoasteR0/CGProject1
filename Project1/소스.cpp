@@ -77,19 +77,26 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 
 GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 {
-	float r, g, b, a;
+	float r = 1.0f, g = 1.0f, b = 1.0f, a = 1.0f;
 
 #ifdef Quiz1
 	r = red; g = green; b = blue; a = alpha;
 #endif // Quiz1
-#ifdef Quiz2
-	r = 1.0f; g = 1.0f; b = 1.0f; a = 1.0f;
-
-
-#endif // Quiz2
 
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
+
+#ifdef Quiz2
+	glColor3f(lt.rgb.Red, lt.rgb.Green, lt.rgb.Blue);
+	glRectf(lt.left, lt.top, lt.right, lt.bottom);
+	glColor3f(rt.rgb.Red, rt.rgb.Green, rt.rgb.Blue);
+	glRectf(rt.left, rt.top, rt.right, rt.bottom);
+	glColor3f(lb.rgb.Red, lb.rgb.Green, lb.rgb.Blue);
+	glRectf(lb.left, lb.top, lb.right, lb.bottom);
+	glColor3f(rb.rgb.Red, rb.rgb.Green, rb.rgb.Blue);
+	glRectf(rb.left, rb.top, rb.right, rb.bottom);
+#endif // Quiz2
+
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
 
