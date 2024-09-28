@@ -1,8 +1,9 @@
 #include <iostream>
 #include <random>
 #include <gl/glew.h> //--- 필요한 헤더파일 include
-#include<gl/freeglut.h>
+#include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
+#include "RGB.h"
 
 #define Quiz2
 
@@ -27,15 +28,21 @@ GLvoid Timer(int value);
 #endif // Quiz1
 
 #ifdef Quiz2
+struct RGBa
+{
+	GLfloat Red = 0, Green = 0, Blue = 0, Alpha = 1;
+};
+
 struct Rect
 {
 	GLfloat left = 0, top = 0, right = 0, bottom = 0;
+	RGBa rgb;
 };
 
-Rect lt = { -WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0 };
-Rect rt = { 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH / 2, 0 };
-Rect lb = { -WINDOW_WIDTH / 2, 0, 0, -WINDOW_HEIGHT / 2 };
-Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2 };
+Rect lt = { -WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0 , {RED} };
+Rect rt = { 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH / 2, 0 , {GREEN} };
+Rect lb = { -WINDOW_WIDTH / 2, 0, 0, -WINDOW_HEIGHT / 2 , {BLUE} };
+Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, {YELLOW} };
 #endif // Quiz2
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -75,6 +82,11 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 #ifdef Quiz1
 	r = red; g = green; b = blue; a = alpha;
 #endif // Quiz1
+#ifdef Quiz2
+	r = 1.0f; g = 1.0f; b = 1.0f; a = 1.0f;
+
+
+#endif // Quiz2
 
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
