@@ -6,6 +6,9 @@
 
 #define Quiz2
 
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
 using namespace std;
 
 random_device rd;
@@ -24,7 +27,15 @@ GLvoid Timer(int value);
 #endif // Quiz1
 
 #ifdef Quiz2
+struct Rect
+{
+	GLfloat left = 0, top = 0, right = 0, bottom = 0;
+};
 
+Rect lt = { -WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0 };
+Rect rt = { 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH / 2, 0 };
+Rect lb = { -WINDOW_WIDTH / 2, 0, 0, -WINDOW_HEIGHT / 2 };
+Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2 };
 #endif // Quiz2
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -33,7 +44,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	glutInit(&argc, argv); //--- glut 초기화
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); //--- 디스플레이 모드 설정
 	glutInitWindowPosition(0, 0); //--- 윈도우의 위치 지정
-	glutInitWindowSize(800, 600); //--- 윈도우의 크기 지정
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT); //--- 윈도우의 크기 지정
 	glutCreateWindow("Example1"); //--- 윈도우 생성(윈도우 이름)
 	
 	//--- GLEW 초기화하기
