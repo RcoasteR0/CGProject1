@@ -18,6 +18,7 @@ mt19937 gen(rd());
 GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
+GLvoid Mouse(int button, int state, int x, int y);
 
 #ifdef Quiz1
 float red = 1.0f, green = 1.0f, blue = 1.0f, alpha = 1.0f;
@@ -30,7 +31,7 @@ GLvoid Timer(int value);
 #ifdef Quiz2
 struct RGBa
 {
-	GLfloat Red = 0, Green = 0, Blue = 0, Alpha = 1;
+	GLfloat Red = 0, Green = 0, Blue = 0;
 };
 
 struct Rect
@@ -43,6 +44,16 @@ Rect lt = { -WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0 , {RED} };
 Rect rt = { 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH / 2, 0 , {GREEN} };
 Rect lb = { -WINDOW_WIDTH / 2, 0, 0, -WINDOW_HEIGHT / 2 , {BLUE} };
 Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, {YELLOW} };
+
+RGBa bg = { WHITE };
+
+uniform_real_distribution<float> randcolor(0.0f, 1.0f);
+void Change_RandomColor(RGBa* rgb)
+{
+	(*rgb).Red = randcolor(gen);
+	(*rgb).Green = randcolor(gen);
+	(*rgb).Blue = randcolor(gen);
+}
 #endif // Quiz2
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -67,6 +78,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	glutDisplayFunc(drawScene); //--- 출력 콜백함수의 지정
 	glutReshapeFunc(Reshape); //--- 다시 그리기 콜백함수 지정
 	glutKeyboardFunc(Keyboard); //--- 키보드 입력 콜백함수 지정
+	glutMouseFunc(Mouse);
 
 #ifdef Quiz1
 	glutTimerFunc(1000, Timer, 1);
@@ -81,18 +93,26 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 #ifdef Quiz1
 	r = red; g = green; b = blue; a = alpha;
-#endif // Quiz1
-
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
+#endif // Quiz1
+#ifdef Quiz2
+	r = bg.Red; g = bg.Green; b = bg.Blue;
+	glClearColor(r, g, b, a); //--- 바탕색을 변경
+	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
+#endif // Quiz2
+
 
 #ifdef Quiz2
 	glColor3f(lt.rgb.Red, lt.rgb.Green, lt.rgb.Blue);
 	glRectf(lt.left, lt.top, lt.right, lt.bottom);
+
 	glColor3f(rt.rgb.Red, rt.rgb.Green, rt.rgb.Blue);
 	glRectf(rt.left, rt.top, rt.right, rt.bottom);
+
 	glColor3f(lb.rgb.Red, lb.rgb.Green, lb.rgb.Blue);
 	glRectf(lb.left, lb.top, lb.right, lb.bottom);
+
 	glColor3f(rb.rgb.Red, rb.rgb.Green, rb.rgb.Blue);
 	glRectf(rb.left, rb.top, rb.right, rb.bottom);
 #endif // Quiz2
@@ -140,6 +160,43 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 #endif // Quiz1
 
 	glutPostRedisplay(); //--- 배경색이 바뀔 때마다 출력 콜백 함수를 호출하여 화면을 refresh 한다
+}
+
+GLvoid Mouse(int button, int state, int x, int y)
+{
+	GLfloat mouseX = x - WINDOW_WIDTH / 2;
+	GLfloat mouseY = WINDOW_HEIGHT / 2 - y;
+
+#ifdef Quiz2
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		if (mouseX >= lt.left && mouseX <= lt.right && mouseY <= lt.top && mouseY >= lt.bottom)
+			Change_RandomColor(&(lt.rgb));
+		else if (mouseX >= rt.left && mouseX <= rt.right && mouseY <= rt.top && mouseY >= rt.bottom)
+			Change_RandomColor(&(rt.rgb));
+		else if (mouseX >= lb.left && mouseX <= lb.right && mouseY <= lb.top && mouseY >= lb.bottom)
+			Change_RandomColor(&(lb.rgb));
+		else if (mouseX >= rb.left && mouseX <= rb.right && mouseY <= rb.top && mouseY >= rb.bottom)
+			Change_RandomColor(&(rb.rgb));
+		else
+			Change_RandomColor(&bg);
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+		if (mouseX >= -WINDOW_WIDTH / 2 && mouseX <= 0 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
+		{
+			if (mouseX >= lt.left && mouseX <= lt.right && mouseY <= lt.top && mouseY >= lt.bottom)
+			{
+				lt.left += 10; lt.top -= 10; lt.right -= 10; lt.bottom += 10;
+			}
+			else
+			{
+				lt.left -= 10; lt.top += 10; lt.right += 10; lt.bottom -= 10;
+			}
+		}
+
+	}
+#endif // Quiz2
 }
 
 #ifdef Quiz1
