@@ -5,7 +5,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz2
+#define Quiz3
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -56,6 +56,48 @@ void Change_RandomColor(RGBa* rgb)
 }
 #endif // Quiz2
 
+#ifdef Quiz3
+struct RGB
+{
+	GLfloat Red = 0, Green = 0, Blue = 0;
+};
+
+class Rect
+{
+public:
+	GLfloat left, top, right, bottom;
+	RGB rgb;
+
+	Rect()
+	{
+		left = 0; top = 0; right = 0; bottom = 0;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat r, GLfloat t, RGB color)
+	{
+		left = l; top = t; right = r; bottom = b; rgb = color;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat size, RGB color)
+	{
+		left = l; bottom = b; right = l + size; top = b + size; rgb = color;
+	}
+
+	~Rect()
+	{
+
+	}
+
+	void Draw()
+	{
+		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
+		glRectf(left, bottom, right, top);
+	}
+};
+
+Rect rect(0.0f, 0.0f, 0.5f, { GREEN });
+#endif // Quiz3
+
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
 	//--- 윈도우 생성하기
@@ -93,15 +135,13 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 #ifdef Quiz1
 	r = red; g = green; b = blue; a = alpha;
-	glClearColor(r, g, b, a); //--- 바탕색을 변경
-	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
 #endif // Quiz1
 #ifdef Quiz2
 	r = bg.Red; g = bg.Green; b = bg.Blue;
-	glClearColor(r, g, b, a); //--- 바탕색을 변경
-	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
 #endif // Quiz2
 
+	glClearColor(r, g, b, a); //--- 바탕색을 변경
+	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
 
 #ifdef Quiz2
 	glColor3f(lt.rgb.Red, lt.rgb.Green, lt.rgb.Blue);
@@ -116,6 +156,9 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	glColor3f(rb.rgb.Red, rb.rgb.Green, rb.rgb.Blue);
 	glRectf(rb.left, rb.top, rb.right, rb.bottom);
 #endif // Quiz2
+#ifdef Quiz3
+	rect.Draw();
+#endif // Quiz3
 
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
