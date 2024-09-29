@@ -47,7 +47,7 @@ Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, {YELLOW} };
 
 RGBa bg = { WHITE };
 
-uniform_real_distribution<float> randcolor(0.0f, 1.0f);
+uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
 void Change_RandomColor(RGBa* rgb)
 {
 	(*rgb).Red = randcolor(gen);
@@ -192,6 +192,17 @@ GLvoid Mouse(int button, int state, int x, int y)
 			else
 			{
 				lt.left -= 10; lt.top += 10; lt.right += 10; lt.bottom -= 10;
+			}
+		}
+		else if (mouseX >= 0 && mouseX <= WINDOW_WIDTH / 2 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
+		{
+			if (mouseX >= rt.left && mouseX <= rt.right && mouseY <= rt.top && mouseY >= rt.bottom)
+			{
+				rt.left += 10; rt.top -= 10; rt.right -= 10; rt.bottom += 10;
+			}
+			else
+			{
+				rt.left -= 10; rt.top += 10; rt.right += 10; rt.bottom -= 10;
 			}
 		}
 
