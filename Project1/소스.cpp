@@ -232,7 +232,59 @@ GLvoid Mouse(int button, int state, int x, int y)
 	{
 		if (mouseX >= -WINDOW_WIDTH / 2 && mouseX <= 0 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
 		{
-
+			if (mouseX >= lt.left * WINDOW_WIDTH / 2 && mouseX <= lt.right * WINDOW_WIDTH / 2
+				&& mouseY <= lt.top * WINDOW_HEIGHT / 2 && mouseY >= lt.bottom * WINDOW_HEIGHT / 2)
+			{
+				lt.left += 0.05f; lt.bottom += 0.05f;
+				lt.right -= 0.05f; lt.top -= 0.05f;
+			}
+			else
+			{
+				lt.left -= 0.05f; lt.bottom -= 0.05f;
+				lt.right += 0.05f; lt.top += 0.05f;
+			}
+		}
+		else if (mouseX >= 0 && mouseX <= WINDOW_WIDTH / 2 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
+		{
+			if (mouseX >= rt.left * WINDOW_WIDTH / 2 && mouseX <= rt.right * WINDOW_WIDTH / 2
+				&& mouseY <= rt.top * WINDOW_HEIGHT / 2 && mouseY >= rt.bottom * WINDOW_HEIGHT / 2)
+			{
+				rt.left += 0.05f; rt.bottom += 0.05f;
+				rt.right -= 0.05f; rt.top -= 0.05f;
+			}
+			else
+			{
+				rt.left -= 0.05f; rt.bottom -= 0.05f;
+				rt.right += 0.05f; rt.top += 0.05f;
+			}
+		}
+		else if (mouseX >= -WINDOW_WIDTH / 2 && mouseX <= 0 && mouseY <= 0 && mouseY >= -WINDOW_HEIGHT / 2)
+		{
+			if (mouseX >= lb.left * WINDOW_WIDTH / 2 && mouseX <= lb.right * WINDOW_WIDTH / 2
+				&& mouseY <= lb.top * WINDOW_HEIGHT / 2 && mouseY >= lb.bottom * WINDOW_HEIGHT / 2)
+			{
+				lb.left += 0.05f; lb.bottom += 0.05f;
+				lb.right -= 0.05f; lb.top -= 0.05f;
+			}
+			else
+			{
+				lb.left -= 0.05f; lb.bottom -= 0.05f;
+				lb.right += 0.05f; lb.top += 0.05f;
+			}
+		}
+		else if (mouseX >= 0 && mouseX <= WINDOW_WIDTH / 2 && mouseY <= 0 && mouseY >= -WINDOW_HEIGHT / 2)
+		{
+			if (mouseX >= rb.left * WINDOW_WIDTH / 2 && mouseX <= rb.right * WINDOW_WIDTH / 2
+				&& mouseY <= rb.top * WINDOW_HEIGHT / 2 && mouseY >= rb.bottom * WINDOW_HEIGHT / 2)
+			{
+				rb.left += 0.05f; rb.bottom += 0.05f;
+				rb.right -= 0.05f; rb.top -= 0.05f;
+			}
+			else
+			{
+				rb.left -= 0.05f; rb.bottom -= 0.05f;
+				rb.right += 0.05f; rb.top += 0.05f;
+			}
 		}
 
 	}
