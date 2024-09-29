@@ -5,7 +5,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz3
+#define Quiz2
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -36,14 +36,14 @@ struct RGBa
 
 struct Rect
 {
-	GLfloat left = 0, top = 0, right = 0, bottom = 0;
+	GLfloat left = 0, bottom = 0, right = 0, top = 0;
 	RGBa rgb;
 };
 
-Rect lt = { -WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0 , {RED} };
-Rect rt = { 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH / 2, 0 , {GREEN} };
-Rect lb = { -WINDOW_WIDTH / 2, 0, 0, -WINDOW_HEIGHT / 2 , {BLUE} };
-Rect rb = { 0, 0, WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, {YELLOW} };
+Rect lt = { -1.0f, 0, 0, 1.0f , {RED} };
+Rect rt = { 0, 0, 1.0f, 1.0f, {GREEN} };
+Rect lb = { -1.0f, -1.0f, 0, 0, {BLUE} };
+Rect rb = { 0, -1.0, 1.0f, 0, {YELLOW} };
 
 RGBa bg = { WHITE };
 
@@ -145,16 +145,16 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 #ifdef Quiz2
 	glColor3f(lt.rgb.Red, lt.rgb.Green, lt.rgb.Blue);
-	glRectf(lt.left, lt.top, lt.right, lt.bottom);
+	glRectf(lt.left, lt.bottom, lt.right, lt.top);
 
 	glColor3f(rt.rgb.Red, rt.rgb.Green, rt.rgb.Blue);
-	glRectf(rt.left, rt.top, rt.right, rt.bottom);
+	glRectf(rt.left, rt.bottom, rt.right, rt.top);
 
 	glColor3f(lb.rgb.Red, lb.rgb.Green, lb.rgb.Blue);
-	glRectf(lb.left, lb.top, lb.right, lb.bottom);
+	glRectf(lb.left, lb.bottom, lb.right, lb.top);
 
 	glColor3f(rb.rgb.Red, rb.rgb.Green, rb.rgb.Blue);
-	glRectf(rb.left, rb.top, rb.right, rb.bottom);
+	glRectf(rb.left, rb.bottom, rb.right, rb.top);
 #endif // Quiz2
 #ifdef Quiz3
 	rect.Draw();
@@ -213,13 +213,17 @@ GLvoid Mouse(int button, int state, int x, int y)
 #ifdef Quiz2
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-		if (mouseX >= lt.left && mouseX <= lt.right && mouseY <= lt.top && mouseY >= lt.bottom)
+		if (mouseX >= lt.left * WINDOW_WIDTH / 2 && mouseX <= lt.right * WINDOW_WIDTH / 2 
+			&& mouseY <= lt.top * WINDOW_HEIGHT / 2 && mouseY >= lt.bottom * WINDOW_HEIGHT / 2)
 			Change_RandomColor(&(lt.rgb));
-		else if (mouseX >= rt.left && mouseX <= rt.right && mouseY <= rt.top && mouseY >= rt.bottom)
+		else if (mouseX >= rt.left * WINDOW_WIDTH / 2 && mouseX <= rt.right * WINDOW_WIDTH / 2
+			&& mouseY <= rt.top * WINDOW_HEIGHT / 2 && mouseY >= rt.bottom * WINDOW_HEIGHT / 2)
 			Change_RandomColor(&(rt.rgb));
-		else if (mouseX >= lb.left && mouseX <= lb.right && mouseY <= lb.top && mouseY >= lb.bottom)
+		else if (mouseX >= lb.left * WINDOW_WIDTH / 2 && mouseX <= lb.right * WINDOW_WIDTH / 2
+			&& mouseY <= lb.top * WINDOW_HEIGHT / 2 && mouseY >= lb.bottom * WINDOW_HEIGHT / 2)
 			Change_RandomColor(&(lb.rgb));
-		else if (mouseX >= rb.left && mouseX <= rb.right && mouseY <= rb.top && mouseY >= rb.bottom)
+		else if (mouseX >= rb.left * WINDOW_WIDTH / 2 && mouseX <= rb.right * WINDOW_WIDTH / 2
+			&& mouseY <= rb.top * WINDOW_HEIGHT / 2 && mouseY >= rb.bottom * WINDOW_HEIGHT / 2)
 			Change_RandomColor(&(rb.rgb));
 		else
 			Change_RandomColor(&bg);
@@ -228,25 +232,7 @@ GLvoid Mouse(int button, int state, int x, int y)
 	{
 		if (mouseX >= -WINDOW_WIDTH / 2 && mouseX <= 0 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
 		{
-			if (mouseX >= lt.left && mouseX <= lt.right && mouseY <= lt.top && mouseY >= lt.bottom)
-			{
-				lt.left += 10; lt.top -= 10; lt.right -= 10; lt.bottom += 10;
-			}
-			else
-			{
-				lt.left -= 10; lt.top += 10; lt.right += 10; lt.bottom -= 10;
-			}
-		}
-		else if (mouseX >= 0 && mouseX <= WINDOW_WIDTH / 2 && mouseY <= WINDOW_HEIGHT / 2 && mouseY >= 0)
-		{
-			if (mouseX >= rt.left && mouseX <= rt.right && mouseY <= rt.top && mouseY >= rt.bottom)
-			{
-				rt.left += 10; rt.top -= 10; rt.right -= 10; rt.bottom += 10;
-			}
-			else
-			{
-				rt.left -= 10; rt.top += 10; rt.right += 10; rt.bottom -= 10;
-			}
+
 		}
 
 	}
