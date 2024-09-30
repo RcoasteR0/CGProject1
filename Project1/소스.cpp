@@ -19,6 +19,7 @@ GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid Mouse(int button, int state, int x, int y);
+GLvoid Motion(int x, int y);
 
 #ifdef Quiz1
 float red = 1.0f, green = 1.0f, blue = 1.0f, alpha = 1.0f;
@@ -95,7 +96,7 @@ public:
 	}
 };
 
-uniform_real_distribution<GLfloat> randcoord(-1.0f, 1.0f);
+uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.8f);
 uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
 uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
 
@@ -106,6 +107,11 @@ RGB RandomColor()
 
 Rect rects[10];
 int rectcount = 0;
+int prevX = 0;
+int prevY = 0;
+int dragrect = 0;
+bool drag = false;
+
 #endif // Quiz3
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -131,6 +137,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	glutReshapeFunc(Reshape); //--- 다시 그리기 콜백함수 지정
 	glutKeyboardFunc(Keyboard); //--- 키보드 입력 콜백함수 지정
 	glutMouseFunc(Mouse);
+	glutMotionFunc(Motion);
 
 #ifdef Quiz1
 	glutTimerFunc(1000, Timer, 1);
@@ -218,6 +225,8 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
 		++rectcount;
 	}
+	else if(key == 'q')
+		glutLeaveMainLoop();
 #endif // Quiz3
 
 	glutPostRedisplay(); //--- 배경색이 바뀔 때마다 출력 콜백 함수를 호출하여 화면을 refresh 한다
@@ -307,6 +316,43 @@ GLvoid Mouse(int button, int state, int x, int y)
 
 	}
 #endif // Quiz2
+#ifdef Quiz3
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		for (int i = rectcount - 1; i >= 0; --i)
+		{
+			if (mouseX >= rects[i].left * WINDOW_WIDTH / 2 && mouseX <= rects[i].right * WINDOW_WIDTH / 2
+				&& mouseY <= rects[i].top * WINDOW_HEIGHT / 2 && mouseY >= rects[i].bottom * WINDOW_HEIGHT / 2)
+			{
+				drag = true;
+				dragrect = i;
+				prevX = mouseX;
+				prevY = mouseY;
+			}
+		}
+	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+		drag = false;
+#endif // Quiz3
+}
+
+GLvoid Motion(int x, int y)
+{
+	GLfloat mouseX = x - WINDOW_WIDTH / 2;
+	GLfloat mouseY = WINDOW_HEIGHT / 2 - y;
+#ifdef Quiz3
+	if (drag)
+	{
+		rects[dragrect].left += (mouseX - prevX) / WINDOW_WIDTH;
+		rects[dragrect].right += (mouseX - prevX) / WINDOW_WIDTH;
+		rects[dragrect].top += (mouseY - prevY) / WINDOW_HEIGHT;
+		rects[dragrect].bottom += (mouseY - prevY) / WINDOW_HEIGHT;
+		prevX = mouseX;
+		prevY = mouseY;
+	}
+#endif // Quiz3
+
+	glutPostRedisplay();
 }
 
 #ifdef Quiz1
