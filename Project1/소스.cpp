@@ -97,7 +97,7 @@ public:
 
 uniform_real_distribution<GLfloat> randcoord(-1.0f, 1.0f);
 uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
-uniform_real_distribution<GLfloat> randsize(0.0f, 0.5f);
+uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
 
 RGB RandomColor()
 {
@@ -167,7 +167,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	glRectf(rb.left, rb.bottom, rb.right, rb.top);
 #endif // Quiz2
 #ifdef Quiz3
-	for (int i = 0; i < rectcount; ++rectcount)
+	for (int i = 0; i < rectcount; ++i)
 		rects[i].Draw();
 #endif // Quiz3
 
