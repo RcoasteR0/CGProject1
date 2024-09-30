@@ -5,7 +5,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz2
+#define Quiz3
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -95,7 +95,17 @@ public:
 	}
 };
 
-Rect rect(0.0f, 0.0f, 0.5f, { GREEN });
+uniform_real_distribution<GLfloat> randcoord(-1.0f, 1.0f);
+uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
+uniform_real_distribution<GLfloat> randsize(0.0f, 0.5f);
+
+RGB RandomColor()
+{
+	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
+}
+
+Rect rects[10];
+int rectcount = 0;
 #endif // Quiz3
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -157,7 +167,8 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	glRectf(rb.left, rb.bottom, rb.right, rb.top);
 #endif // Quiz2
 #ifdef Quiz3
-	rect.Draw();
+	for (int i = 0; i < rectcount; ++rectcount)
+		rects[i].Draw();
 #endif // Quiz3
 
 	glutSwapBuffers(); //--- 화면에 출력하기
@@ -201,6 +212,13 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		break;
 	}
 #endif // Quiz1
+#ifdef Quiz3
+	if (key == 'a' && rectcount < 10)
+	{
+		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		++rectcount;
+	}
+#endif // Quiz3
 
 	glutPostRedisplay(); //--- 배경색이 바뀔 때마다 출력 콜백 함수를 호출하여 화면을 refresh 한다
 }
