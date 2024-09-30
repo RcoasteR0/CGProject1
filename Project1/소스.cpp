@@ -343,10 +343,10 @@ GLvoid Motion(int x, int y)
 #ifdef Quiz3
 	if (drag)
 	{
-		rects[dragrect].left += (mouseX - prevX) / WINDOW_WIDTH;
-		rects[dragrect].right += (mouseX - prevX) / WINDOW_WIDTH;
-		rects[dragrect].top += (mouseY - prevY) / WINDOW_HEIGHT;
-		rects[dragrect].bottom += (mouseY - prevY) / WINDOW_HEIGHT;
+		rects[dragrect].left += (mouseX - prevX) / (WINDOW_WIDTH / 2);
+		rects[dragrect].right += (mouseX - prevX) / (WINDOW_WIDTH / 2);
+		rects[dragrect].top += (mouseY - prevY) / (WINDOW_HEIGHT / 2);
+		rects[dragrect].bottom += (mouseY - prevY) / (WINDOW_HEIGHT / 2);
 		prevX = mouseX;
 		prevY = mouseY;
 	}
