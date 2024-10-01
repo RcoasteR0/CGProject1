@@ -246,9 +246,6 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 's': // end timer
 		timer = false;
 		break;
-	case 'q':
-		glutLeaveMainLoop();
-		break;
 	}
 #endif // Quiz1
 #ifdef Quiz3
@@ -257,9 +254,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
 		++rectcount;
 	}
-	else if(key == 'q')
-		glutLeaveMainLoop();
 #endif // Quiz3
+
+	//프로그램 종료
+	if (key == 'q')
+		glutLeaveMainLoop();
 
 	glutPostRedisplay(); //--- 배경색이 바뀔 때마다 출력 콜백 함수를 호출하여 화면을 refresh 한다
 }
