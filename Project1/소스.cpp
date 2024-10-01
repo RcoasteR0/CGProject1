@@ -119,12 +119,12 @@ Rect MergeRect(Rect rect1, Rect rect2)
 	else
 		left = rect2.left;
 
-	if (rect1.right < rect2.right)
+	if (rect1.right > rect2.right)
 		right = rect1.right;
 	else
 		right = rect2.right;
 
-	if (rect1.top < rect2.top)
+	if (rect1.top > rect2.top)
 		top = rect1.top;
 	else
 		top = rect2.top;
@@ -378,20 +378,11 @@ GLvoid Mouse(int button, int state, int x, int y)
 				{
 					rects[dragrect] = MergeRect(rects[i], rects[dragrect]);
 					
-					if (dragrect < i)
+					for (int j = i; j < rectcount; ++j)
 					{
-						for (int j = i; j < rectcount; ++j)
-						{
-							rects[j] = rects[j + 1];
-						}
+						rects[j] = rects[j + 1];
 					}
-					else
-					{
-						for (int j = dragrect; j < rectcount; ++j)
-						{
-							rects[j] = rects[j + 1];
-						}
-					}
+					--rectcount;
 					break;
 				}
 			}
