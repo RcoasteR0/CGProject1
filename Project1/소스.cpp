@@ -105,6 +105,38 @@ RGB RandomColor()
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
 }
 
+bool CheckColide(Rect rect1, Rect rect2)
+{
+	return  (rect1.left <= rect2.right) && (rect1.top >= rect2.bottom) && (rect1.right >= rect2.left) && (rect1.bottom <= rect2.top);
+}
+
+Rect MergeRect(Rect rect1, Rect rect2)
+{
+	GLfloat left, bottom, right, top;
+
+	if (rect1.left < rect2.left)
+		left = rect1.left;
+	else
+		left = rect2.left;
+
+	if (rect1.right < rect2.right)
+		right = rect1.right;
+	else
+		right = rect2.right;
+
+	if (rect1.top < rect2.top)
+		top = rect1.top;
+	else
+		top = rect2.top;
+
+	if (rect1.bottom < rect2.bottom)
+		bottom = rect1.bottom;
+	else
+		bottom = rect2.bottom;
+
+	return Rect(left, bottom, right, top, RandomColor());
+}
+
 Rect rects[10];
 int rectcount = 0;
 int prevX = 0;
@@ -328,11 +360,43 @@ GLvoid Mouse(int button, int state, int x, int y)
 				dragrect = i;
 				prevX = mouseX;
 				prevY = mouseY;
+				break;
 			}
 		}
 	}
 	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-		drag = false;
+	{
+		if (drag)
+		{
+			drag = false;
+			for (int i = rectcount - 1; i >= 0; --i)
+			{
+				if (i == dragrect)
+					continue;
+
+				if (CheckColide(rects[i], rects[dragrect]))
+				{
+					rects[dragrect] = MergeRect(rects[i], rects[dragrect]);
+					
+					if (dragrect < i)
+					{
+						for (int j = i; j < rectcount; ++j)
+						{
+							rects[j] = rects[j + 1];
+						}
+					}
+					else
+					{
+						for (int j = dragrect; j < rectcount; ++j)
+						{
+							rects[j] = rects[j + 1];
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
 #endif // Quiz3
 }
 
