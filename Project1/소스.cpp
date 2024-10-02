@@ -185,6 +185,11 @@ public:
 	}
 };
 
+enum Animation
+{
+	STOP, DIAGONAL, ZIGZAG, CHANGESIZE, RANDOMCOLOR
+};
+
 uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.8f);
 uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
 uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
@@ -194,7 +199,22 @@ RGB RandomColor()
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
 }
 
+bool CheckColideWall_H(Rect rect)
+{
+	return  (rect.left <= -1.0f) && (rect.right >= 1.0f);
+}
+
+bool CheckColideWall_V(Rect rect)
+{
+	return  (rect.bottom <= -1.0f) && (rect.top >= 1.0f);
+}
+
+GLvoid Timer(int value);
+
+const GLfloat rectsize = 0.2;
 Rect rects[5];
+Rect initrects[5];
+Animation anim = STOP;
 int rectcount = 0;
 #endif // Quiz4
 
@@ -226,6 +246,10 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 #ifdef Quiz1
 	glutTimerFunc(1000, Timer, 1);
 #endif // Quiz1
+#ifdef Quiz4
+	glutTimerFunc(1000 / 60, Timer, 1);
+#endif // Quiz4
+
 
 	glutMainLoop(); //--- 이벤트 처리 시작
 }
@@ -314,6 +338,47 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		++rectcount;
 	}
 #endif // Quiz3
+#ifdef Quiz4
+	switch (key)
+	{
+	case '1':
+		if (anim == DIAGONAL)
+			anim = STOP;
+		else
+			anim = DIAGONAL;
+		break;
+	case '2':
+		if (anim == ZIGZAG)
+			anim = STOP;
+		else
+			anim = ZIGZAG;
+		break;
+	case '3':
+		if (anim == CHANGESIZE)
+			anim = STOP;
+		else
+			anim = CHANGESIZE;
+		break;
+	case '4':
+		if (anim == RANDOMCOLOR)
+			anim = STOP;
+		else
+			anim = RANDOMCOLOR;
+		break;
+	case 's':
+		anim = STOP;
+		break;
+	case 'm':
+		for (int i = 0; i < rectcount; ++i)
+			rects[i] = initrects[i];
+		break;
+	case 'r':
+		rectcount = 0;
+		break;
+	default:
+		break;
+	}
+#endif // Quiz4
 
 	//프로그램 종료
 	if (key == 'q')
@@ -450,8 +515,8 @@ GLvoid Mouse(int button, int state, int x, int y)
 #ifdef Quiz4
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && rectcount < 5)
 	{
-		GLfloat size = randsize(gen);
-		rects[rectcount] = Rect(mouseX / (WINDOW_WIDTH / 2) - size / 2, mouseY / (WINDOW_HEIGHT / 2) - size / 2, size, RandomColor());
+		rects[rectcount] = Rect(mouseX / (WINDOW_WIDTH / 2) - rectsize / 2, mouseY / (WINDOW_HEIGHT / 2) - rectsize / 2, rectsize, RandomColor());
+		initrects[rectcount] = rects[rectcount];
 		++rectcount;
 	}
 #endif // Quiz4
@@ -489,5 +554,22 @@ GLvoid Timer(int value)
 	glutTimerFunc(1000, Timer, 1);
 }
 #endif // Quiz1
-
+#ifdef Quiz4
+GLvoid Timer(int value)
+{
+	switch (anim)
+	{
+	case DIAGONAL:
+		break;
+	case ZIGZAG:
+		break;
+	case CHANGESIZE:
+		break;
+	case RANDOMCOLOR:
+		break;
+	default:
+		break;
+	}
+}
+#endif // Quiz4
 
