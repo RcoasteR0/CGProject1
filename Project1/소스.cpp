@@ -264,6 +264,10 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	for (int i = 0; i < rectcount; ++i)
 		rects[i].Draw();
 #endif // Quiz3
+#ifdef Quiz4
+	for (int i = 0; i < rectcount; ++i)
+		rects[i].Draw();
+#endif // Quiz4
 
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
@@ -447,7 +451,7 @@ GLvoid Mouse(int button, int state, int x, int y)
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && rectcount < 5)
 	{
 		GLfloat size = randsize(gen);
-		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		rects[rectcount] = Rect(mouseX / (WINDOW_WIDTH / 2) - size / 2, mouseY / (WINDOW_HEIGHT / 2) - size / 2, size, RandomColor());
 		++rectcount;
 	}
 #endif // Quiz4
