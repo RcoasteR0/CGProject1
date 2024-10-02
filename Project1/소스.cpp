@@ -252,7 +252,96 @@ int rectcount = 0;
 #endif // Quiz4
 
 #ifdef Quiz5
+struct RGB
+{
+	GLfloat Red = 0, Green = 0, Blue = 0;
+};
 
+class Rect
+{
+public:
+	GLfloat left, top, right, bottom;
+	RGB rgb;
+
+	Rect()
+	{
+		left = 0; top = 0; right = 0; bottom = 0;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat r, GLfloat t, RGB color)
+	{
+		left = l; bottom = b; right = r; top = t; rgb = color;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat size, RGB color)
+	{
+		left = l; bottom = b; right = l + size; top = b + size; rgb = color;
+	}
+
+	~Rect()
+	{
+
+	}
+
+	GLfloat Size_X() { return abs(right - left); }
+	GLfloat Size_Y() { return abs(top - bottom); }
+	GLfloat Middle_X() { return left + Size_X() / 2; }
+	GLfloat Middle_Y() { return bottom + Size_Y() / 2; }
+
+	void Draw()
+	{
+		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
+		glRectf(left, bottom, right, top);
+	}
+
+	void Move_X(GLfloat move)
+	{
+		left += move;
+		right += move;
+	}
+
+	void Move_Y(GLfloat move)
+	{
+		top += move;
+		bottom += move;
+	}
+
+	void ChangeSize_X(GLfloat size)
+	{
+		left = Middle_X() - size / 2;
+		right = Middle_X() + size / 2;
+	}
+
+	void ChangeSize_Y(GLfloat size)
+	{
+		bottom = Middle_Y() - size / 2;
+		top = Middle_Y() + size / 2;
+	}
+};
+
+uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
+uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.9f);
+uniform_int_distribution<int> randcount(20, 40);
+
+RGB RandomColor()
+{
+	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
+}
+
+void InitializeArray(Rect rects[40], int* rectcount)
+{
+	*rectcount = randcount(gen);
+
+	for (int i = 0; i < *rectcount; ++i)
+		rects[i] = Rect(randcoord(gen), randcoord(gen), 0.05f, RandomColor());
+}
+
+GLvoid Timer(int value);
+
+Rect rects[40];
+Rect eraser;
+int rectcount;
+bool hold = false;
 #endif // Quiz5
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -274,6 +363,10 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	else
 		std::cout << "GLEW Initialized\n";
 
+#ifdef Quiz5
+	InitializeArray(rects, &rectcount);
+#endif // Quiz5
+
 	glutDisplayFunc(drawScene); //--- 출력 콜백함수의 지정
 	glutReshapeFunc(Reshape); //--- 다시 그리기 콜백함수 지정
 	glutKeyboardFunc(Keyboard); //--- 키보드 입력 콜백함수 지정
@@ -284,6 +377,9 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	glutTimerFunc(1000, Timer, 1);
 #endif // Quiz1
 #ifdef Quiz4
+	glutTimerFunc(1000 / 60, Timer, 1);
+#endif // Quiz4
+#ifdef Quiz5
 	glutTimerFunc(1000 / 60, Timer, 1);
 #endif // Quiz4
 
@@ -328,6 +424,12 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	for (int i = 0; i < rectcount; ++i)
 		rects[i].Draw();
 #endif // Quiz4
+#ifdef Quiz5
+	for (int i = 0; i < rectcount; ++i)
+	{
+		rects[i].Draw();
+	}
+#endif // Quiz5
 
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
@@ -678,4 +780,12 @@ GLvoid Timer(int value)
 	glutTimerFunc(1000 / 60, Timer, 1);
 }
 #endif // Quiz4
+#ifdef Quiz5
+GLvoid Timer(int value)
+{
+
+	glutPostRedisplay();
+	glutTimerFunc(1000 / 60, Timer, 1);
+}
+#endif // Quiz5
 
