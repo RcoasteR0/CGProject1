@@ -146,6 +146,56 @@ bool drag = false;
 
 #endif // Quiz3
 
+#ifdef Quiz4
+struct RGB
+{
+	GLfloat Red = 0, Green = 0, Blue = 0;
+};
+
+class Rect
+{
+public:
+	GLfloat left, top, right, bottom;
+	RGB rgb;
+
+	Rect()
+	{
+		left = 0; top = 0; right = 0; bottom = 0;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat r, GLfloat t, RGB color)
+	{
+		left = l; bottom = b; right = r; top = t; rgb = color;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat size, RGB color)
+	{
+		left = l; bottom = b; right = l + size; top = b + size; rgb = color;
+	}
+
+	~Rect()
+	{
+
+	}
+
+	void Draw()
+	{
+		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
+		glRectf(left, bottom, right, top);
+	}
+};
+
+uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.8f);
+uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
+uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
+
+RGB RandomColor()
+{
+	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
+}
+
+#endif // Quiz4
+
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
 	//--- 윈도우 생성하기
@@ -191,7 +241,6 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 #ifdef Quiz4
 	r = 0.3f; g = 0.3f; b = 0.3f;
 #endif // Quiz4
-
 
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
@@ -392,6 +441,14 @@ GLvoid Mouse(int button, int state, int x, int y)
 		}
 	}
 #endif // Quiz3
+#ifdef Quiz4
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		++rectcount;
+	}
+#endif // Quiz4
+
 }
 
 GLvoid Motion(int x, int y)
