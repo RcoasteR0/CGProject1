@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <cmath>
 #include <gl/glew.h> //--- 필요한 헤더파일 include
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
@@ -178,10 +179,39 @@ public:
 
 	}
 
+	GLfloat Size_X() { return abs(right - left); }
+	GLfloat Size_Y() { return abs(top - bottom); }
+	GLfloat Middle_X() { return left + Size_X() / 2; }
+	GLfloat Middle_Y() { return bottom + Size_Y() / 2; }
+
 	void Draw()
 	{
 		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
 		glRectf(left, bottom, right, top);
+	}
+
+	void Move_X(GLfloat move)
+	{
+		left += move;
+		right += move;
+	}
+
+	void Move_Y(GLfloat move)
+	{
+		top += move;
+		bottom += move;
+	}
+
+	void ChangeSize_X(GLfloat size)
+	{
+		left = Middle_X() - size / 2;
+		right = Middle_X() + size / 2;
+	}
+
+	void ChangeSize_Y(GLfloat size)
+	{
+		bottom = Middle_Y() - size / 2;
+		top = Middle_Y() + size / 2;
 	}
 };
 
@@ -190,23 +220,23 @@ enum Animation
 	STOP, DIAGONAL, ZIGZAG, CHANGESIZE, RANDOMCOLOR
 };
 
-uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.8f);
 uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
 uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
+uniform_int_distribution<int> randdir(-1, 1);
 
 RGB RandomColor()
 {
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
 }
 
-bool CheckColideWall_H(Rect rect)
+bool CheckColideWall_X(Rect rect)
 {
-	return  (rect.left <= -1.0f) && (rect.right >= 1.0f);
+	return  (rect.left <= -1.0f) || (rect.right >= 1.0f);
 }
 
-bool CheckColideWall_V(Rect rect)
+bool CheckColideWall_Y(Rect rect)
 {
-	return  (rect.bottom <= -1.0f) && (rect.top >= 1.0f);
+	return  (rect.bottom <= -1.0f) || (rect.top >= 1.0f);
 }
 
 GLvoid Timer(int value);
@@ -215,6 +245,9 @@ const GLfloat rectsize = 0.2;
 Rect rects[5];
 Rect initrects[5];
 Animation anim = STOP;
+GLfloat move_X[5];
+GLfloat move_Y[5];
+int delay = 0;
 int rectcount = 0;
 #endif // Quiz4
 
@@ -249,7 +282,6 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 #ifdef Quiz4
 	glutTimerFunc(1000 / 60, Timer, 1);
 #endif // Quiz4
-
 
 	glutMainLoop(); //--- 이벤트 처리 시작
 }
@@ -345,7 +377,17 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		if (anim == DIAGONAL)
 			anim = STOP;
 		else
+		{
 			anim = DIAGONAL;
+
+			for (int i = 0; i < rectcount; ++i)
+			{
+				move_X[i] = 0.05f * randdir(gen);
+				move_Y[i] = 0.05f * randdir(gen);
+				if (!(move_X[i] && move_Y[i]))
+					--i;
+			}
+		}
 		break;
 	case '2':
 		if (anim == ZIGZAG)
@@ -560,6 +602,16 @@ GLvoid Timer(int value)
 	switch (anim)
 	{
 	case DIAGONAL:
+		for (int i = 0; i < rectcount; ++i)
+		{
+			rects[i].Move_X(move_X[i]);
+			rects[i].Move_Y(move_Y[i]);
+
+			if (CheckColideWall_X(rects[i]))
+				move_X[i] *= -1;
+			if (CheckColideWall_Y(rects[i]))
+				move_Y[i] *= -1;
+		}
 		break;
 	case ZIGZAG:
 		break;
@@ -570,6 +622,9 @@ GLvoid Timer(int value)
 	default:
 		break;
 	}
+
+	glutPostRedisplay();
+	glutTimerFunc(1000 / 60, Timer, 1);
 }
 #endif // Quiz4
 
