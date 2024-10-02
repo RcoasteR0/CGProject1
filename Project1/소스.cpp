@@ -5,7 +5,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz3
+#define Quiz4
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -188,6 +188,10 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 #ifdef Quiz2
 	r = bg.Red; g = bg.Green; b = bg.Blue;
 #endif // Quiz2
+#ifdef Quiz4
+	r = 0.3f; g = 0.3f; b = 0.3f;
+#endif // Quiz4
+
 
 	glClearColor(r, g, b, a); //--- 바탕색을 변경
 	glClear(GL_COLOR_BUFFER_BIT); //--- 설정된 색으로 전체를 칠하기
