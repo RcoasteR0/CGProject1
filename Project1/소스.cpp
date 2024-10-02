@@ -194,6 +194,8 @@ RGB RandomColor()
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
 }
 
+Rect rects[5];
+int rectcount = 0;
 #endif // Quiz4
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -442,8 +444,9 @@ GLvoid Mouse(int button, int state, int x, int y)
 	}
 #endif // Quiz3
 #ifdef Quiz4
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && rectcount < 5)
 	{
+		GLfloat size = randsize(gen);
 		rects[rectcount] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
 		++rectcount;
 	}
