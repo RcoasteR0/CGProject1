@@ -6,7 +6,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz4
+#define Quiz5
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -251,6 +251,10 @@ int delay = 0;
 int rectcount = 0;
 #endif // Quiz4
 
+#ifdef Quiz5
+
+#endif // Quiz5
+
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
 	//--- 윈도우 생성하기
@@ -393,19 +397,35 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		if (anim == ZIGZAG)
 			anim = STOP;
 		else
+		{
 			anim = ZIGZAG;
+
+			for (int i = 0; i < rectcount; ++i)
+			{
+				move_X[i] = 0.0125f * randdir(gen);
+				move_Y[i] = 0.05f * randdir(gen);
+				if (!(move_X[i] && move_Y[i]))
+					--i;
+			}
+		}
 		break;
 	case '3':
 		if (anim == CHANGESIZE)
 			anim = STOP;
 		else
+		{
 			anim = CHANGESIZE;
+			delay = 0;
+		}
 		break;
 	case '4':
 		if (anim == RANDOMCOLOR)
 			anim = STOP;
 		else
+		{
 			anim = RANDOMCOLOR;
+			delay = 0;
+		}
 		break;
 	case 's':
 		anim = STOP;
@@ -614,10 +634,41 @@ GLvoid Timer(int value)
 		}
 		break;
 	case ZIGZAG:
+		for (int i = 0; i < rectcount; ++i)
+		{
+			rects[i].Move_X(move_X[i]);
+			rects[i].Move_Y(move_Y[i]);
+
+			if (CheckColideWall_X(rects[i]))
+				move_X[i] *= -1;
+			if (CheckColideWall_Y(rects[i]))
+				move_Y[i] *= -1;
+		}
 		break;
 	case CHANGESIZE:
+		if (delay == 0)
+		{
+			for (int i = 0; i < rectcount; ++i)
+			{
+				rects[i].ChangeSize_X(randsize(gen));
+				rects[i].ChangeSize_Y(randsize(gen));
+			}
+		}
+		else if (delay == 29)
+			delay = -1;
+
+		++delay;
 		break;
 	case RANDOMCOLOR:
+		if (delay == 0)
+		{
+			for (int i = 0; i < rectcount; ++i)
+				rects[i].rgb = RandomColor();
+		}
+		else if (delay == 29)
+			delay = -1;
+
+		++delay;
 		break;
 	default:
 		break;
