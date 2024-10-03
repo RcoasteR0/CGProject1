@@ -328,6 +328,11 @@ RGB RandomColor()
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
 }
 
+bool CheckColide(Rect rect1, Rect rect2)
+{
+	return  (rect1.left <= rect2.right) && (rect1.top >= rect2.bottom) && (rect1.right >= rect2.left) && (rect1.bottom <= rect2.top);
+}
+
 void InitializeArray(Rect rects[40], int* rectcount)
 {
 	*rectcount = randcount(gen);
@@ -815,6 +820,25 @@ GLvoid Timer(int value)
 #ifdef Quiz5
 GLvoid Timer(int value)
 {
+	if (hold)
+	{
+		for (int i = rectcount - 1; i >= 0; --i)
+		{
+			if (CheckColide(rects[i], eraser))
+			{
+				eraser.ChangeSize_X(eraser.Size_X() + 0.1f);
+				eraser.ChangeSize_Y(eraser.Size_Y() + 0.1f);
+				eraser.rgb = rects[i].rgb;
+
+				for (int j = i; j < rectcount; ++j)
+				{
+					rects[j] = rects[j + 1];
+				}
+				--rectcount;
+				break;
+			}
+		}
+	}
 
 	glutPostRedisplay();
 	glutTimerFunc(1000 / 60, Timer, 1);
