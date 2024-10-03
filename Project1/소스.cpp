@@ -555,6 +555,12 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		break;
 	}
 #endif // Quiz4
+#ifdef Quiz5
+	if (key == 'r')
+	{
+		InitializeArray(rects, &rectcount);
+	}
+#endif // Quiz5
 
 	//프로그램 종료
 	if (key == 'q')
