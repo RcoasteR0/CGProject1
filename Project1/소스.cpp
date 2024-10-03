@@ -332,6 +332,7 @@ void InitializeArray(Rect rects[40], int* rectcount)
 {
 	*rectcount = randcount(gen);
 
+	cout << "rect :" << *rectcount << endl;
 	for (int i = 0; i < *rectcount; ++i)
 		rects[i] = Rect(randcoord(gen), randcoord(gen), 0.05f, RandomColor());
 }
@@ -341,6 +342,8 @@ GLvoid Timer(int value);
 Rect rects[40];
 Rect eraser;
 int rectcount;
+int prevX = 0;
+int prevY = 0;
 bool hold = false;
 #endif // Quiz5
 
@@ -428,6 +431,10 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	for (int i = 0; i < rectcount; ++i)
 	{
 		rects[i].Draw();
+	}
+	if (hold)
+	{
+		eraser.Draw();
 	}
 #endif // Quiz5
 
@@ -684,6 +691,20 @@ GLvoid Mouse(int button, int state, int x, int y)
 		++rectcount;
 	}
 #endif // Quiz4
+#ifdef Quiz5
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		hold = true;
+		eraser = Rect(mouseX / (WINDOW_WIDTH / 2) - 0.1f / 2, mouseY / (WINDOW_HEIGHT / 2) - 0.1f / 2, 0.1f, { BLACK });
+		prevX = mouseX;
+		prevY = mouseY;
+	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		hold = false;
+	}
+
+#endif // Quiz5
 
 }
 
@@ -702,6 +723,17 @@ GLvoid Motion(int x, int y)
 		prevY = mouseY;
 	}
 #endif // Quiz3
+#ifdef Quiz5
+	if (hold)
+	{
+		eraser.left += (mouseX - prevX) / (WINDOW_WIDTH / 2);
+		eraser.right += (mouseX - prevX) / (WINDOW_WIDTH / 2);
+		eraser.top += (mouseY - prevY) / (WINDOW_HEIGHT / 2);
+		eraser.bottom += (mouseY - prevY) / (WINDOW_HEIGHT / 2);
+		prevX = mouseX;
+		prevY = mouseY;
+	}
+#endif // Quiz5
 
 	glutPostRedisplay();
 }
