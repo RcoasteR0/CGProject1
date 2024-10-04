@@ -428,10 +428,30 @@ enum Split
 uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
 uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
 uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.9f);
+uniform_int_distribution<int> randomtype(0, 3);
+uniform_int_distribution<int> randomcount(5, 10);
 
 RGB RandomColor()
 {
 	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
+}
+
+void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* rectcount, bool split[])
+{
+	*rectcount = randomcount(gen);
+
+	for (int i = 0; i < *rectcount; ++i)
+	{
+		rects[i] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		splittype[i] = (Split)randomtype(gen);
+		split[i] = false;
+		if (splittype[i] == EIGHTDIRECTION)
+		{
+		}
+		else
+		{
+		}
+	}
 }
 
 GLvoid Timer(int value);
@@ -440,6 +460,7 @@ Rect rects[10];
 Rect splitedrects[80];
 Split splittype[10];
 int rectcount;
+bool split[10];
 #endif // Quiz6
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
@@ -464,6 +485,9 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 #ifdef Quiz5
 	InitializeArray(rects, &rectcount);
 #endif // Quiz5
+#ifdef Quiz6
+	InitializeRects(rects, splitedrects, splittype, &rectcount, split);
+#endif // Quiz6
 
 	glutDisplayFunc(drawScene); //--- 출력 콜백함수의 지정
 	glutReshapeFunc(Reshape); //--- 다시 그리기 콜백함수 지정
@@ -532,6 +556,12 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		eraser.Draw();
 	}
 #endif // Quiz5
+#ifdef Quiz6
+	for (int i = 0; i < rectcount; ++i)
+	{
+		rects[i].Draw();
+	}
+#endif // Quiz6
 
 	glutSwapBuffers(); //--- 화면에 출력하기
 }
@@ -651,6 +681,12 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		InitializeArray(rects, &rectcount);
 	}
 #endif // Quiz5
+#ifdef Quiz6
+	if (key == 'r')
+	{
+		InitializeRects(rects, splitedrects, splittype, &rectcount, split);
+	}
+#endif // Quiz6
 
 	//프로그램 종료
 	if (key == 'q')
