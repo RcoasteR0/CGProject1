@@ -6,7 +6,7 @@
 #include <gl/freeglut_ext.h>
 #include "RGB.h"
 
-#define Quiz5
+#define Quiz6
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -351,6 +351,96 @@ int prevX = 0;
 int prevY = 0;
 bool hold = false;
 #endif // Quiz5
+
+#ifdef Quiz6
+struct RGB
+{
+	GLfloat Red = 0, Green = 0, Blue = 0;
+};
+
+class Rect
+{
+public:
+	GLfloat left, top, right, bottom;
+	RGB rgb;
+
+	Rect()
+	{
+		left = 0; top = 0; right = 0; bottom = 0;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat r, GLfloat t, RGB color)
+	{
+		left = l; bottom = b; right = r; top = t; rgb = color;
+	}
+
+	Rect(GLfloat l, GLfloat b, GLfloat size, RGB color)
+	{
+		left = l; bottom = b; right = l + size; top = b + size; rgb = color;
+	}
+
+	~Rect()
+	{
+
+	}
+
+	GLfloat Size_X() { return abs(right - left); }
+	GLfloat Size_Y() { return abs(top - bottom); }
+	GLfloat Middle_X() { return left + Size_X() / 2; }
+	GLfloat Middle_Y() { return bottom + Size_Y() / 2; }
+
+	void Draw()
+	{
+		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
+		glRectf(left, bottom, right, top);
+	}
+
+	void Move_X(GLfloat move)
+	{
+		left += move;
+		right += move;
+	}
+
+	void Move_Y(GLfloat move)
+	{
+		top += move;
+		bottom += move;
+	}
+
+	void ChangeSize_X(GLfloat size)
+	{
+		left = Middle_X() - size / 2;
+		right = Middle_X() + size / 2;
+	}
+
+	void ChangeSize_Y(GLfloat size)
+	{
+		bottom = Middle_Y() - size / 2;
+		top = Middle_Y() + size / 2;
+	}
+};
+
+enum Split
+{
+	STRAIGHT, DIAGONAL, ONEDIRECTION, EIGHTDIRECTION
+};
+
+uniform_real_distribution<GLfloat> randcolor(0.0f, 1.0f);
+uniform_real_distribution<GLfloat> randsize(0.1f, 0.5f);
+uniform_real_distribution<GLfloat> randcoord(-1.0f, 0.9f);
+
+RGB RandomColor()
+{
+	return { randcolor(gen), randcolor(gen) , randcolor(gen) };
+}
+
+GLvoid Timer(int value);
+
+Rect rects[10];
+Rect splitedrects[80];
+Split splittype[10];
+int rectcount;
+#endif // Quiz6
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 {
