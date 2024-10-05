@@ -482,6 +482,8 @@ void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* re
 
 GLvoid Timer(int value);
 
+const GLfloat changesize_f = 0.01f;
+const GLfloat move_f = 0.05f;
 Rect rects[10];
 Rect splitedrects[80];
 Split splittype[10];
@@ -1044,74 +1046,74 @@ GLvoid Timer(int value)
 			switch (splittype[i])
 			{
 			case STRAIGHT:
-				splitedrects[i * 8].Move_Y(-0.05f);
-				splitedrects[i * 8 + 1].Move_X(0.05f);
-				splitedrects[i * 8 + 2].Move_X(-0.05f);
-				splitedrects[i * 8 + 3].Move_Y(0.05f);
+				splitedrects[i * 8].Move_Y(-move_f);
+				splitedrects[i * 8 + 1].Move_X(move_f);
+				splitedrects[i * 8 + 2].Move_X(-move_f);
+				splitedrects[i * 8 + 3].Move_Y(move_f);
 
 				for (int j = i * 8; j < i * 8 + 4; ++j)
 				{
-					splitedrects[j].ChangeSize_X(-0.05f);
-					splitedrects[j].ChangeSize_Y(-0.05f);
+					splitedrects[j].ChangeSize_X(-changesize_f);
+					splitedrects[j].ChangeSize_Y(-changesize_f);
 				}
 				break;
 			case DIAGONAL:
-				splitedrects[i * 8].Move_X(-0.05f);
-				splitedrects[i * 8].Move_Y(-0.05f);
+				splitedrects[i * 8].Move_X(-move_f);
+				splitedrects[i * 8].Move_Y(-move_f);
 
-				splitedrects[i * 8 + 1].Move_X(0.05f);
-				splitedrects[i * 8 + 1].Move_Y(-0.05f);
+				splitedrects[i * 8 + 1].Move_X(move_f);
+				splitedrects[i * 8 + 1].Move_Y(-move_f);
 
-				splitedrects[i * 8 + 2].Move_X(-0.05f);
-				splitedrects[i * 8 + 2].Move_Y(0.05f);
+				splitedrects[i * 8 + 2].Move_X(-move_f);
+				splitedrects[i * 8 + 2].Move_Y(move_f);
 
-				splitedrects[i * 8 + 3].Move_X(0.05f);
-				splitedrects[i * 8 + 3].Move_Y(0.05f);
+				splitedrects[i * 8 + 3].Move_X(move_f);
+				splitedrects[i * 8 + 3].Move_Y(move_f);
 
 				for (int j = i * 8; j < i * 8 + 4; ++j)
 				{
-					splitedrects[j].ChangeSize_X(-0.05f);
-					splitedrects[j].ChangeSize_Y(-0.05f);
+					splitedrects[j].ChangeSize_X(-changesize_f);
+					splitedrects[j].ChangeSize_Y(-changesize_f);
 				}
 				break;
 			case ONEDIRECTION:
-				splitedrects[i * 8].Move_X(0.05f);
-				splitedrects[i * 8 + 1].Move_X(0.05f);
-				splitedrects[i * 8 + 2].Move_X(0.05f);
-				splitedrects[i * 8 + 3].Move_X(0.05f);
+				splitedrects[i * 8].Move_X(move_f);
+				splitedrects[i * 8 + 1].Move_X(move_f);
+				splitedrects[i * 8 + 2].Move_X(move_f);
+				splitedrects[i * 8 + 3].Move_X(move_f);
 
 				for (int j = i * 8; j < i * 8 + 4; ++j)
 				{
-					splitedrects[j].ChangeSize_X(-0.05f);
-					splitedrects[j].ChangeSize_Y(-0.05f);
+					splitedrects[j].ChangeSize_X(-changesize_f);
+					splitedrects[j].ChangeSize_Y(-changesize_f);
 				}
 				break;
 			case EIGHTDIRECTION:
-				splitedrects[i * 8].Move_X(-0.05f);
+				splitedrects[i * 8].Move_X(-move_f);
 
-				splitedrects[i * 8 + 1].Move_X(-0.05f);
-				splitedrects[i * 8 + 1].Move_Y(-0.05f);
+				splitedrects[i * 8 + 1].Move_X(-move_f);
+				splitedrects[i * 8 + 1].Move_Y(-move_f);
 
-				splitedrects[i * 8 + 2].Move_Y(-0.05f);
+				splitedrects[i * 8 + 2].Move_Y(-move_f);
 
-				splitedrects[i * 8 + 3].Move_X(0.05f);
-				splitedrects[i * 8 + 3].Move_Y(-0.05f);
+				splitedrects[i * 8 + 3].Move_X(move_f);
+				splitedrects[i * 8 + 3].Move_Y(-move_f);
 
 
-				splitedrects[i * 8 + 4].Move_X(-0.05f);
-				splitedrects[i * 8 + 4].Move_Y(0.05f);
+				splitedrects[i * 8 + 4].Move_X(-move_f);
+				splitedrects[i * 8 + 4].Move_Y(move_f);
 
-				splitedrects[i * 8 + 5].Move_Y(0.05f);
+				splitedrects[i * 8 + 5].Move_Y(move_f);
 
-				splitedrects[i * 8 + 6].Move_X(0.05f);
-				splitedrects[i * 8 + 6].Move_Y(0.05f);
+				splitedrects[i * 8 + 6].Move_X(move_f);
+				splitedrects[i * 8 + 6].Move_Y(move_f);
 
-				splitedrects[i * 8 + 7].Move_X(0.05f);
+				splitedrects[i * 8 + 7].Move_X(move_f);
 
 				for (int j = i * 8; j < i * 8 + 8; ++j)
 				{
-					splitedrects[j].ChangeSize_X(-0.05f);
-					splitedrects[j].ChangeSize_Y(-0.05f);
+					splitedrects[j].ChangeSize_X(-changesize_f);
+					splitedrects[j].ChangeSize_Y(-changesize_f);
 				}
 				break;
 			default:
