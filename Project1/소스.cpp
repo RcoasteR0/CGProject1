@@ -384,13 +384,16 @@ public:
 
 	}
 
-	GLfloat Size_X() { return abs(right - left); }
-	GLfloat Size_Y() { return abs(top - bottom); }
+	GLfloat Size_X() { return right - left; }
+	GLfloat Size_Y() { return top - bottom; }
 	GLfloat Middle_X() { return left + Size_X() / 2; }
 	GLfloat Middle_Y() { return bottom + Size_Y() / 2; }
 
 	void Draw()
 	{
+		if (left > right || bottom > top)
+			return;
+
 		glColor3f(rgb.Red, rgb.Green, rgb.Blue);
 		glRectf(left, bottom, right, top);
 	}
@@ -438,30 +441,30 @@ RGB RandomColor()
 
 void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* rectcount, bool split[])
 {
-	//*rectcount = randomcount(gen);
-	*rectcount = 4;
+	*rectcount = randomcount(gen);
+	//*rectcount = 4;
 
-	rects[0] = Rect(-0.5f, 0.25f, 0.3f, RandomColor());
-	splittype[0] = STRAIGHT;
-	rects[1] = Rect(0.5f, 0.25f, 0.3f, RandomColor());
-	splittype[1] = DIAGONAL;
-	rects[2] = Rect(-0.5f, -0.75f, 0.3f, RandomColor());
-	splittype[2] = ONEDIRECTION;
-	rects[3] = Rect(0.5f, -0.75f, 0.3f, RandomColor());
-	splittype[3] = EIGHTDIRECTION;
+	//rects[0] = Rect(-0.5f, 0.25f, 0.3f, RandomColor());
+	//splittype[0] = STRAIGHT;
+	//rects[1] = Rect(0.5f, 0.25f, 0.3f, RandomColor());
+	//splittype[1] = DIAGONAL;
+	//rects[2] = Rect(-0.5f, -0.75f, 0.3f, RandomColor());
+	//splittype[2] = ONEDIRECTION;
+	//rects[3] = Rect(0.5f, -0.75f, 0.3f, RandomColor());
+	//splittype[3] = EIGHTDIRECTION;
 	for (int i = 0; i < *rectcount; ++i)
 	{
-		//rects[i] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
-		//splittype[i] = (Split)randomtype(gen);
+		rects[i] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		splittype[i] = (Split)randomtype(gen);
 		split[i] = false;
 		if (splittype[i] == EIGHTDIRECTION)
 		{
 			for (int j = i * 8; j < (i + 1) * 8; ++j)
 			{
 				if(j < i * 8 + 4)
-					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom, rects[i].Size_X(), rects[i].rgb);
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom, rects[i].Size_X() / 4, rects[i].rgb);
 				else
-					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X(), rects[i].rgb);
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X() / 4, rects[i].rgb);
 			}
 		}
 		else
@@ -469,9 +472,9 @@ void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* re
 			for (int j = i * 8; j < i * 8 + 4; ++j)
 			{
 				if(j < i * 8 + 2)
-					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom, rects[i].Size_X(), rects[i].rgb);
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom, rects[i].Size_X() / 2, rects[i].rgb);
 				else
-					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X(), rects[i].rgb);
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X() / 2, rects[i].rgb);
 			}
 		}
 	}
