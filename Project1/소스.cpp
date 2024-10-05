@@ -846,6 +846,20 @@ GLvoid Mouse(int button, int state, int x, int y)
 	}
 
 #endif // Quiz5
+#ifdef Quiz6
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		for (int i = rectcount - 1; i >= 0; --i)
+		{
+			if (mouseX / (WINDOW_WIDTH / 2) >= rects[i].left && mouseX / (WINDOW_WIDTH / 2) <= rects[i].right &&
+				mouseY / (WINDOW_HEIGHT / 2) >= rects[i].bottom && mouseY / (WINDOW_HEIGHT / 2) <= rects[i].top)
+			{
+				split[i] = true;
+				break;
+			}
+		}
+	}
+#endif // Quiz6
 
 }
 
@@ -980,4 +994,9 @@ GLvoid Timer(int value)
 	glutTimerFunc(1000 / 60, Timer, 1);
 }
 #endif // Quiz5
+#ifdef Quiz6
+GLvoid Timer(int value)
+{
 
+}
+#endif // Quiz6
