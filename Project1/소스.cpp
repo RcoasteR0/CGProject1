@@ -409,14 +409,14 @@ public:
 
 	void ChangeSize_X(GLfloat size)
 	{
-		left = Middle_X() - size / 2;
-		right = Middle_X() + size / 2;
+		left -= size / 2;
+		right += size / 2;
 	}
 
 	void ChangeSize_Y(GLfloat size)
 	{
-		bottom = Middle_Y() - size / 2;
-		top = Middle_Y() + size / 2;
+		bottom -= size / 2;
+		top += size / 2;
 	}
 };
 
@@ -457,12 +457,22 @@ void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* re
 		if (splittype[i] == EIGHTDIRECTION)
 		{
 			for (int j = i * 8; j < (i + 1) * 8; ++j)
-				splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom + (rects[i].Size_Y() / 2) * (j / 4), rects[i].Size_X() / 4, rects[i].rgb);
+			{
+				if(j < i * 8 + 4)
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom, rects[i].Size_X(), rects[i].rgb);
+				else
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X(), rects[i].rgb);
+			}
 		}
 		else
 		{
 			for (int j = i * 8; j < i * 8 + 4; ++j)
-				splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom + (rects[i].Size_Y() / 2) * (j / 2), rects[i].Size_X() / 2, rects[i].rgb);
+			{
+				if(j < i * 8 + 2)
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom, rects[i].Size_X(), rects[i].rgb);
+				else
+					splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom + rects[i].Size_Y() / 2, rects[i].Size_X(), rects[i].rgb);
+			}
 		}
 	}
 }
@@ -518,7 +528,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 	glutTimerFunc(1000 / 60, Timer, 1);
 #endif // Quiz5
 #ifdef Quiz6
-	glutTimerFunc(1000 / 60, Timer, 1);
+	glutTimerFunc(1000 / 30, Timer, 1);
 #endif // Quiz6
 
 	glutMainLoop(); //--- 이벤트 처리 시작
@@ -1108,6 +1118,6 @@ GLvoid Timer(int value)
 	}
 
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 60, Timer, 1);
+	glutTimerFunc(1000 / 30, Timer, 1);
 }
 #endif // Quiz6
