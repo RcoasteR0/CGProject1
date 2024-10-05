@@ -438,12 +438,21 @@ RGB RandomColor()
 
 void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* rectcount, bool split[])
 {
-	*rectcount = randomcount(gen);
+	//*rectcount = randomcount(gen);
+	*rectcount = 4;
 
+	rects[0] = Rect(-0.5f, 0.25f, 0.3f, RandomColor());
+	splittype[0] = STRAIGHT;
+	rects[1] = Rect(0.5f, 0.25f, 0.3f, RandomColor());
+	splittype[1] = DIAGONAL;
+	rects[2] = Rect(-0.5f, -0.75f, 0.3f, RandomColor());
+	splittype[2] = ONEDIRECTION;
+	rects[3] = Rect(0.5f, -0.75f, 0.3f, RandomColor());
+	splittype[3] = EIGHTDIRECTION;
 	for (int i = 0; i < *rectcount; ++i)
 	{
-		rects[i] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
-		splittype[i] = (Split)randomtype(gen);
+		//rects[i] = Rect(randcoord(gen), randcoord(gen), randsize(gen), RandomColor());
+		//splittype[i] = (Split)randomtype(gen);
 		split[i] = false;
 		if (splittype[i] == EIGHTDIRECTION)
 		{
@@ -872,7 +881,7 @@ GLvoid Mouse(int button, int state, int x, int y)
 				mouseY / (WINDOW_HEIGHT / 2) >= rects[i].bottom && mouseY / (WINDOW_HEIGHT / 2) <= rects[i].top && split[i] == false)
 			{
 				split[i] = true;
-				cout << "split rect" << i << endl;
+				cout << "split rect" << i << " for " << splittype[i] << endl;
 				break;
 			}
 		}
