@@ -447,9 +447,13 @@ void InitializeRects(Rect rects[], Rect splitrects[], Split splittype[], int* re
 		split[i] = false;
 		if (splittype[i] == EIGHTDIRECTION)
 		{
+			for (int j = i * 8; j < (i + 1) * 8; ++j)
+				splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 4) * (j % 4), rects[i].bottom + (rects[i].Size_Y() / 2) * (j / 4), rects[i].Size_X() / 4, rects[i].rgb);
 		}
 		else
 		{
+			for (int j = i * 8; j < i * 8 + 4; ++j)
+				splitrects[j] = Rect(rects[i].left + (rects[i].Size_X() / 2) * (j % 2), rects[i].bottom + (rects[i].Size_Y() / 2) * (j / 2), rects[i].Size_X() / 2, rects[i].rgb);
 		}
 	}
 }
