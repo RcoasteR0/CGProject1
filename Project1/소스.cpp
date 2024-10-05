@@ -507,7 +507,10 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설�
 #endif // Quiz4
 #ifdef Quiz5
 	glutTimerFunc(1000 / 60, Timer, 1);
-#endif // Quiz4
+#endif // Quiz5
+#ifdef Quiz6
+	glutTimerFunc(1000 / 60, Timer, 1);
+#endif // Quiz6
 
 	glutMainLoop(); //--- 이벤트 처리 시작
 }
@@ -563,7 +566,21 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 #ifdef Quiz6
 	for (int i = 0; i < rectcount; ++i)
 	{
-		rects[i].Draw();
+		if (split[i])
+		{
+			if (splittype[i] == EIGHTDIRECTION)
+			{
+				for (int j = i * 8; j < (i + 1) * 8; ++j)
+					splitedrects[j].Draw();
+			}
+			else
+			{
+				for (int j = i * 8; j < i * 8 + 4; ++j)
+					splitedrects[j].Draw();
+			}
+		}
+		else
+			rects[i].Draw();
 	}
 #endif // Quiz6
 
@@ -852,9 +869,10 @@ GLvoid Mouse(int button, int state, int x, int y)
 		for (int i = rectcount - 1; i >= 0; --i)
 		{
 			if (mouseX / (WINDOW_WIDTH / 2) >= rects[i].left && mouseX / (WINDOW_WIDTH / 2) <= rects[i].right &&
-				mouseY / (WINDOW_HEIGHT / 2) >= rects[i].bottom && mouseY / (WINDOW_HEIGHT / 2) <= rects[i].top)
+				mouseY / (WINDOW_HEIGHT / 2) >= rects[i].bottom && mouseY / (WINDOW_HEIGHT / 2) <= rects[i].top && split[i] == false)
 			{
 				split[i] = true;
+				cout << "split rect" << i << endl;
 				break;
 			}
 		}
@@ -997,6 +1015,90 @@ GLvoid Timer(int value)
 #ifdef Quiz6
 GLvoid Timer(int value)
 {
+	for (int i = 0; i < rectcount; ++i)
+	{
+		if (split[i])
+		{
+			switch (splittype[i])
+			{
+			case STRAIGHT:
+				splitedrects[i * 8].Move_Y(-0.05f);
+				splitedrects[i * 8 + 1].Move_X(0.05f);
+				splitedrects[i * 8 + 2].Move_X(-0.05f);
+				splitedrects[i * 8 + 3].Move_Y(0.05f);
 
+				for (int j = i * 8; j < i * 8 + 4; ++j)
+				{
+					splitedrects[j].ChangeSize_X(-0.05f);
+					splitedrects[j].ChangeSize_Y(-0.05f);
+				}
+				break;
+			case DIAGONAL:
+				splitedrects[i * 8].Move_X(-0.05f);
+				splitedrects[i * 8].Move_Y(-0.05f);
+
+				splitedrects[i * 8 + 1].Move_X(0.05f);
+				splitedrects[i * 8 + 1].Move_Y(-0.05f);
+
+				splitedrects[i * 8 + 2].Move_X(-0.05f);
+				splitedrects[i * 8 + 2].Move_Y(0.05f);
+
+				splitedrects[i * 8 + 3].Move_X(0.05f);
+				splitedrects[i * 8 + 3].Move_Y(0.05f);
+
+				for (int j = i * 8; j < i * 8 + 4; ++j)
+				{
+					splitedrects[j].ChangeSize_X(-0.05f);
+					splitedrects[j].ChangeSize_Y(-0.05f);
+				}
+				break;
+			case ONEDIRECTION:
+				splitedrects[i * 8].Move_X(0.05f);
+				splitedrects[i * 8 + 1].Move_X(0.05f);
+				splitedrects[i * 8 + 2].Move_X(0.05f);
+				splitedrects[i * 8 + 3].Move_X(0.05f);
+
+				for (int j = i * 8; j < i * 8 + 4; ++j)
+				{
+					splitedrects[j].ChangeSize_X(-0.05f);
+					splitedrects[j].ChangeSize_Y(-0.05f);
+				}
+				break;
+			case EIGHTDIRECTION:
+				splitedrects[i * 8].Move_X(-0.05f);
+
+				splitedrects[i * 8 + 1].Move_X(-0.05f);
+				splitedrects[i * 8 + 1].Move_Y(-0.05f);
+
+				splitedrects[i * 8 + 2].Move_Y(-0.05f);
+
+				splitedrects[i * 8 + 3].Move_X(0.05f);
+				splitedrects[i * 8 + 3].Move_Y(-0.05f);
+
+
+				splitedrects[i * 8 + 4].Move_X(-0.05f);
+				splitedrects[i * 8 + 4].Move_Y(0.05f);
+
+				splitedrects[i * 8 + 5].Move_Y(0.05f);
+
+				splitedrects[i * 8 + 6].Move_X(0.05f);
+				splitedrects[i * 8 + 6].Move_Y(0.05f);
+
+				splitedrects[i * 8 + 7].Move_X(0.05f);
+
+				for (int j = i * 8; j < i * 8 + 8; ++j)
+				{
+					splitedrects[j].ChangeSize_X(-0.05f);
+					splitedrects[j].ChangeSize_Y(-0.05f);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	glutPostRedisplay();
+	glutTimerFunc(1000 / 60, Timer, 1);
 }
 #endif // Quiz6
